@@ -1,38 +1,51 @@
 import { useState } from 'react';
-import './App.css'
+import './App.css';
 import Button from './components/Button';
-import Todos from './components/Todos';7
+import Todos from './components/Todos';
 import { TODOS } from './data/data';
 
 function App() {
-
   const [todos, setTodos] = useState(TODOS);
 
-  console.log(todos);
-  
-  
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
+    const input = e.target.elements.todo;
+    const body = input.value.trim();
     
-  }
+    if (!body) return;
+    
+    const newTodo = {
+      id: todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) + 1 : 1,
+      body: body
+    };
+    
+    setTodos([...todos, newTodo]);
+    input.value = '';
+  };
 
+  const handleAddTask = () => {
+    const newTodo = {
+      id: todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) + 1 : 1,
+      body: "New Default Task"
+    };
+    setTodos([...todos, newTodo]);
+  };
 
   return (
-   <div>
+    <div>
       <form onSubmit={handleSubmit}>
         <input type="text" name="todo" />
-        <button type='submit'>Add Todo</button>
+        <button type="submit">Add Todo via Form</button>
       </form>
 
       <h2>My todos</h2>
       <Todos todos={todos} setTodos={setTodos} />
-      <Button />
+      
+      <Button onClick={handleAddTask} greeting="Add Task" />
       <Button greeting="jambo" />
       <Button greeting="konichiwa" />
-
-   </div>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
